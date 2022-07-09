@@ -1,8 +1,6 @@
 defmodule NxColors.CIE.XYZTest do
   use ExUnit.Case
 
-  alias NxColors.CIE.XYZ
-
   @image_rgb Nx.tensor([
                [
                  [255, 255, 255],
@@ -30,7 +28,11 @@ defmodule NxColors.CIE.XYZTest do
 
   describe "from_rgb" do
     test "converts and rgb imaga to xyz" do
-      approx_equal(XYZ.from_rgb(@image_rgb), @image_xyz)
+      @image_rgb
+      |> NxColors.from_nx(channel: :last)
+      |> NxColors.change_colorspace(NxColors.Colorspace.CIE.XYZ)
+      |> NxColors.to_nx(channel: :last)
+      |> approx_equal(@image_xyz)
     end
   end
 
