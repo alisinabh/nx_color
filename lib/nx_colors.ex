@@ -3,40 +3,41 @@ defmodule NxColors do
   Documentation for `NxColors`.
   """
 
-  alias NxColors.RGB
-  alias NxColors.CIE.{XYZ, Lab}
+  alias NxColors.{Colorspace, Image}
 
-  @conversions %{
-    RGB => [XYZ],
-    XYZ => [Lab, RGB],
-    Lab => [XYZ]
-  }
+  def from_nx(tensor, opts \\ []) do
+    channel = Keyword.get(opts, :channel, :first)
+    colorspace = Keyword.get(opts, :colorspace, Colorspace.RGB)
 
-  Enum.each(@conversions, fn {from, tos} ->
-    Enum.each(tos, fn to ->
-      from_str = Module.split(from) |> List.last()
-      to_str = Module.split(to) |> List.last()
+    %Image{
+      colorspace: colorspace,
+      tensor: reverse_channel(tensor, channel, :input)
+    }
+  end
 
-      fun_name = "#{from_str}_to_#{to_str}" |> String.downcase() |> String.to_atom()
-      mod_fun_name = "from_#{from_str}" |> String.downcase() |> String.to_atom()
+  def to_nx(%Image{tensor: tensor}, opts \\ []) do
+    channel = Keyword.get(opts, :channel, :first)
+    reverse_channel(tensor, channel, :output)
+  end
 
-      def unquote(fun_name)(tensor) do
-        unquote(to).unquote(mod_fun_name)(tensor)
-      end
+  def change_colorspace(%Image{} = image, target_colorspace, opts \\ []) do
+    target_colorspace.convert(image, opts)
+  end
 
-      @conversions
-      |> Map.fetch!(to)
-      |> Enum.reject(&(&1 == from))
-      |> Enum.each(fn proxy_to ->
-        proxy_to_str = Module.split(proxy_to) |> List.last()
-        fun_name = "#{from_str}_to_#{proxy_to_str}" |> String.downcase() |> String.to_atom()
-        proxy_mod_fun_name = "from_#{to_str}" |> String.downcase() |> String.to_atom()
+  defp reverse_channel(tensor, :last, _mode), do: tensor
 
-        def unquote(fun_name)(tensor) do
-          unquote(to).unquote(mod_fun_name)(tensor)
-          |> unquote(proxy_to).unquote(proxy_mod_fun_name)()
-        end
-      end)
-    end)
-  end)
+  defp reverse_channel(tensor, :first, mode) do
+    new_axes = reverse_axis(mode, Nx.rank(tensor))
+    Nx.transpose(tensor, axes: new_axes)
+  end
+
+  defp reverse_axis(:input, rank) do
+    Range.new(0, rank - 1)
+    |> Enum.slide(-2..-1, -3)
+  end
+
+  defp reverse_axis(:output, rank) do
+    Range.new(0, rank - 1)
+    |> Enum.slide(-1, -3)
+  end
 end
