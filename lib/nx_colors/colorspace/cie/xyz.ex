@@ -41,6 +41,6 @@ defmodule NxColors.Colorspace.CIE.XYZ do
     mask = cube > lab_threshold()
     le = (tensor - 16 / 116) / 7.787 * (mask == 0)
 
-    (cube * mask + le) * Nx.tensor(illuminant_reference)
+    (cube * mask + le) * illuminant_reference
   end
 end
