@@ -18,7 +18,7 @@ defmodule NxColors.Colorspace.CIE.XYZ do
     tensor = tensor / 255
     mask = tensor > rgb_xyz_threshold()
 
-    gr = Nx.power((tensor + 0.055) / 1.055, 2.4) * mask
+    gr = Nx.power((tensor + 0.055) * mask / 1.055, 2.4) * mask
     le = tensor / 12.92 * (mask == 0)
 
     Nx.dot((gr + le) * 100, Nx.tensor(rgb_to_xyz_constants()))
