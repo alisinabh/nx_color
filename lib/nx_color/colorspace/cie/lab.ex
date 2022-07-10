@@ -1,9 +1,9 @@
-defmodule NxColors.Colorspace.CIE.Lab do
+defmodule NxColor.Colorspace.CIE.Lab do
   @moduledoc """
   CIE L*a*b Colorspace
   """
 
-  use NxColors.Colorspace
+  use NxColor.Colorspace
 
   defconv from: XYZ do
     illuminant_ref = opts[:illuminant_reference] || illuminant_reference()

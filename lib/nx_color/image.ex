@@ -1,4 +1,4 @@
-defmodule NxColors.Image do
+defmodule NxColor.Image do
   @moduledoc """
   Image struct which holds the data for the images
   """
@@ -20,10 +20,10 @@ defmodule NxColors.Image do
   defimpl Inspect do
     import Inspect.Algebra
 
-    def inspect(%NxColors.Image{colorspace: colorspace}, opts) do
+    def inspect(%NxColor.Image{colorspace: colorspace}, opts) do
       force_unfit(
         concat([
-          color("#NxColors.Image<", :map, opts),
+          color("#NxColor.Image<", :map, opts),
           color(to_string(colorspace), :atom, opts),
           color(">", :map, opts)
         ])

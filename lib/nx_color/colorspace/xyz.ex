@@ -1,9 +1,9 @@
-defmodule NxColors.Colorspace.XYZ do
+defmodule NxColor.Colorspace.XYZ do
   @moduledoc """
   XYZ Colorspace
   """
 
-  use NxColors.Colorspace
+  use NxColor.Colorspace
 
   defconv from: RGB do
     from_rgb(image.tensor)

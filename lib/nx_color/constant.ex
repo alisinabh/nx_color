@@ -1,4 +1,4 @@
-defmodule NxColors.Constant do
+defmodule NxColor.Constant do
   @moduledoc """
   Constants used for conversions
   """

@@ -1,40 +1,40 @@
-defmodule NxColors.Colorspace do
+defmodule NxColor.Colorspace do
   @moduledoc """
   Helpers and macros for defining colorspaces
   """
 
-  @callback convert(image :: NxColors.Image.t(), opts :: Keyword.t()) :: NxColors.Image.t()
+  @callback convert(image :: NxColor.Image.t(), opts :: Keyword.t()) :: NxColor.Image.t()
 
   @callback accepted_colorspaces() :: [atom()]
 
   defmacro __using__(_opts) do
     quote do
       import Nx.Defn
-      import NxColors.Constant
-      import NxColors.Colorspace
+      import NxColor.Constant
+      import NxColor.Colorspace
 
-      require NxColors.Colorspace
+      require NxColor.Colorspace
 
-      alias NxColors.Colorspace
+      alias NxColor.Colorspace
 
-      @behaviour NxColors.Colorspace
+      @behaviour NxColor.Colorspace
 
       Module.register_attribute(__MODULE__, :accepted_colorspaces, accumulate: true)
 
-      @before_compile NxColors.Colorspace
+      @before_compile NxColor.Colorspace
     end
   end
 
   defmacro defconv(params, do: block) do
     quote do
       from_colorspace = Keyword.fetch!(unquote(params), :from)
-      @colorspace Module.concat(NxColors.Colorspace, from_colorspace)
+      @colorspace Module.concat(NxColor.Colorspace, from_colorspace)
       @accepted_colorspaces @colorspace
 
       @impl true
-      @spec convert(NxColors.Image.t(), Keyword.t()) :: NxColors.Image.t()
+      @spec convert(NxColor.Image.t(), Keyword.t()) :: NxColor.Image.t()
       def convert(
-            %NxColors.Image{colorspace: @colorspace} = var!(image),
+            %NxColor.Image{colorspace: @colorspace} = var!(image),
             var!(opts)
           ) do
         _ = var!(opts)

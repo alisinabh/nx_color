@@ -1,9 +1,9 @@
-defmodule NxColors.MixProject do
+defmodule NxColor.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :nx_colors,
+      app: :nx_color,
       version: "0.0.1",
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),

@@ -1,8 +1,8 @@
-defmodule NxColorsTest do
+defmodule NxColorTest do
   use ExUnit.Case
-  use NxColors.ColorspaceTestHelper
+  use NxColor.ColorspaceTestHelper
 
-  doctest NxColors
+  doctest NxColor
 
   colorspacetest(Colorspace.AdobeRGB)
   colorspacetest(Colorspace.CIE.LCH, precision: 3)

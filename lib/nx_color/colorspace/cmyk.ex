@@ -1,9 +1,9 @@
-defmodule NxColors.Colorspace.CMYK do
+defmodule NxColor.Colorspace.CMYK do
   @moduledoc """
   CMYK Colorspace
   """
 
-  use NxColors.Colorspace
+  use NxColor.Colorspace
 
   defconv from: CMY do
     from_cmy(image.tensor)

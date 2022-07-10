@@ -1,4 +1,4 @@
-defmodule NxColors.Router.Helper do
+defmodule NxColor.Router.Helper do
   @moduledoc false
 
   def get_route(from, to, acc \\ []) do

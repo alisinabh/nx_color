@@ -1,9 +1,9 @@
-defmodule NxColors.Colorspace.CIE.LCH do
+defmodule NxColor.Colorspace.CIE.LCH do
   @moduledoc """
   CIE L*CH° Colorspace
   """
 
-  use NxColors.Colorspace
+  use NxColor.Colorspace
 
   defconv from: CIE.Lab do
     from_lab(image.tensor)

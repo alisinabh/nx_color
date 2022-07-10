@@ -1,4 +1,4 @@
-defmodule NxColors.ColorspaceTestHelper do
+defmodule NxColor.ColorspaceTestHelper do
   defmacro __using__(_env) do
     module = __MODULE__
 
@@ -6,7 +6,7 @@ defmodule NxColors.ColorspaceTestHelper do
       require unquote(module)
       import unquote(module)
 
-      alias NxColors.Colorspace
+      alias NxColor.Colorspace
 
       def approx_equal(t1, t2, opts \\ []) do
         precision = Nx.power(10, Keyword.get(opts, :precision, 4))
@@ -32,12 +32,12 @@ defmodule NxColors.ColorspaceTestHelper do
   defmacro colorspacetest(colorspace, opts \\ []) do
     quote bind_quoted: [colorspace: colorspace, opts: opts], location: :keep do
       accepted_colorspaces = colorspace.accepted_colorspaces()
-      ["NxColors", "Colorspace" | name] = Module.split(colorspace)
+      ["NxColor", "Colorspace" | name] = Module.split(colorspace)
       path = Enum.join(name, "/") |> String.downcase()
       name = Enum.join(name, ".")
 
       Enum.map(accepted_colorspaces, fn to_colorspace ->
-        ["NxColors", "Colorspace" | to_name] = Module.split(to_colorspace)
+        ["NxColor", "Colorspace" | to_name] = Module.split(to_colorspace)
         to_path = Enum.join(to_name, "/") |> String.downcase()
         to_name = Enum.join(to_name, ".")
 
@@ -52,9 +52,9 @@ defmodule NxColors.ColorspaceTestHelper do
               File.read!(Path.join(["test/fixtures", unquote(to_path), file])) |> Nx.deserialize()
 
             source_tensor
-            |> NxColors.from_nx(channel: :last, colorspace: unquote(colorspace))
-            |> NxColors.change_colorspace(unquote(to_colorspace))
-            |> NxColors.to_nx(channel: :last)
+            |> NxColor.from_nx(channel: :last, colorspace: unquote(colorspace))
+            |> NxColor.change_colorspace(unquote(to_colorspace))
+            |> NxColor.to_nx(channel: :last)
             |> approx_equal(target_tensor, unquote(opts))
           end)
         end

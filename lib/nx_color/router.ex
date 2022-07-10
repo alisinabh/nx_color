@@ -1,12 +1,12 @@
-defmodule NxColors.Router do
+defmodule NxColor.Router do
   @moduledoc """
   Colorspace conversion router
   """
 
-  alias NxColors.Colorspace
+  alias NxColor.Colorspace
 
-  require NxColors.Router.Helper
-  import NxColors.Router.Helper
+  require NxColor.Router.Helper
+  import NxColor.Router.Helper
 
   @colorspaces [
     Colorspace.AdobeRGB,
