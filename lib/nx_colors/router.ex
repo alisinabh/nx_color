@@ -19,6 +19,12 @@ defmodule NxColors.Router do
     Colorspace.Yxy
   ]
 
+  @doc """
+  Returns the route path to convert a colorspace to another
+  """
+  @spec get_route(atom(), atom()) :: [atom()]
+  def get_route(from, to)
+
   Enum.each(@colorspaces, fn colorspace ->
     Enum.each(@colorspaces -- [colorspace], fn
       to_colorspace ->

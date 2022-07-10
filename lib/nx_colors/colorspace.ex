@@ -3,6 +3,10 @@ defmodule NxColors.Colorspace do
   Helpers and macros for defining colorspaces
   """
 
+  @callback convert(image :: NxColors.Image.t(), opts :: Keyword.t()) :: NxColors.Image.t()
+
+  @callback accepted_colorspaces() :: [atom()]
+
   defmacro __using__(_opts) do
     quote do
       import Nx.Defn
@@ -12,6 +16,8 @@ defmodule NxColors.Colorspace do
       require NxColors.Colorspace
 
       alias NxColors.Colorspace
+
+      @behaviour NxColors.Colorspace
 
       Module.register_attribute(__MODULE__, :accepted_colorspaces, accumulate: true)
 
@@ -25,6 +31,8 @@ defmodule NxColors.Colorspace do
       @colorspace Module.concat(NxColors.Colorspace, from_colorspace)
       @accepted_colorspaces @colorspace
 
+      @impl true
+      @spec convert(NxColors.Image.t(), Keyword.t()) :: NxColors.Image.t()
       def convert(
             %NxColors.Image{colorspace: @colorspace} = var!(image),
             var!(opts)
@@ -39,6 +47,7 @@ defmodule NxColors.Colorspace do
     accepted_colorspaces = Module.get_attribute(module, :accepted_colorspaces)
 
     quote do
+      @impl true
       def accepted_colorspaces, do: unquote(accepted_colorspaces)
     end
   end
