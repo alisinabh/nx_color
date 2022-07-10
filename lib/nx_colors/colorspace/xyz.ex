@@ -1,6 +1,6 @@
-defmodule NxColors.Colorspace.CIE.XYZ do
+defmodule NxColors.Colorspace.XYZ do
   @moduledoc """
-  CIE XYZ Colorspace
+  XYZ Colorspace
   """
 
   use NxColors.Colorspace

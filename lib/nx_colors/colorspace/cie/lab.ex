@@ -5,7 +5,7 @@ defmodule NxColors.Colorspace.CIE.Lab do
 
   use NxColors.Colorspace
 
-  defconv from: CIE.XYZ do
+  defconv from: XYZ do
     illuminant_ref = opts[:illuminant_reference] || illuminant_reference()
 
     from_xyz(image.tensor, illuminant_ref)

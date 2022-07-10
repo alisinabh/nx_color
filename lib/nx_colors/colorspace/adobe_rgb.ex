@@ -5,7 +5,7 @@ defmodule NxColors.Colorspace.AdobeRGB do
 
   use NxColors.Colorspace
 
-  defconv from: CIE.XYZ do
+  defconv from: XYZ do
     from_xyz(image.tensor)
   end
 

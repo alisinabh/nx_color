@@ -6,6 +6,6 @@ defmodule NxColorsTest do
 
   colorspacetest(Colorspace.AdobeRGB)
   colorspacetest(Colorspace.CIE.Lab)
-  colorspacetest(Colorspace.CIE.XYZ)
   colorspacetest(Colorspace.RGB)
+  colorspacetest(Colorspace.XYZ)
 end
