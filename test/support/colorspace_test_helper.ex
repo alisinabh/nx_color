@@ -8,22 +8,28 @@ defmodule NxColors.ColorspaceTestHelper do
 
       alias NxColors.Colorspace
 
-      def approx_equal(t1, t2) do
+      def approx_equal(t1, t2, opts \\ []) do
+        precision = Keyword.get(opts, :precision, 1.0e-4)
         assert Nx.shape(t1) == Nx.shape(t2)
 
-        t1
-        |> Nx.subtract(t2)
-        |> Nx.abs()
-        |> Nx.less(1.0e-5)
-        |> Nx.all()
-        |> Nx.to_number()
-        |> then(&assert &1 == 1)
+        eq =
+          t1
+          |> Nx.subtract(t2)
+          |> Nx.abs()
+          |> Nx.less(precision)
+          |> Nx.all()
+          |> Nx.to_number()
+          |> then(&(&1 == 1))
+
+        unless eq do
+          assert t1 == t2
+        end
       end
     end
   end
 
-  defmacro colorspacetest(colorspace) do
-    quote bind_quoted: [colorspace: colorspace], location: :keep do
+  defmacro colorspacetest(colorspace, opts \\ []) do
+    quote bind_quoted: [colorspace: colorspace, opts: opts], location: :keep do
       accepted_colorspaces = colorspace.accepted_colorspaces()
       ["NxColors", "Colorspace" | name] = Module.split(colorspace)
       path = Enum.join(name, "/") |> String.downcase()
@@ -48,7 +54,7 @@ defmodule NxColors.ColorspaceTestHelper do
             |> NxColors.from_nx(channel: :last, colorspace: unquote(colorspace))
             |> NxColors.change_colorspace(unquote(to_colorspace))
             |> NxColors.to_nx(channel: :last)
-            |> approx_equal(target_tensor)
+            |> approx_equal(target_tensor, unquote(opts))
           end)
         end
       end)

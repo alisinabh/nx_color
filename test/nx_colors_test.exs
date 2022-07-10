@@ -4,7 +4,8 @@ defmodule NxColorsTest do
 
   doctest NxColors
 
-  colorspacetest(Colorspace.RGB)
-  colorspacetest(Colorspace.CIE.XYZ)
+  colorspacetest(Colorspace.AdobeRGB)
   colorspacetest(Colorspace.CIE.Lab)
+  colorspacetest(Colorspace.CIE.XYZ)
+  colorspacetest(Colorspace.RGB)
 end

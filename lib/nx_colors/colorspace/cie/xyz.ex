@@ -14,6 +14,10 @@ defmodule NxColors.Colorspace.CIE.XYZ do
     from_lab(image.tensor, illuminant_ref)
   end
 
+  defconv from: AdobeRGB do
+    from_argb(image.tensor)
+  end
+
   defnp from_rgb(tensor) do
     tensor = tensor / 255
     mask = tensor > rgb_xyz_threshold()
@@ -42,5 +46,23 @@ defmodule NxColors.Colorspace.CIE.XYZ do
     le = (tensor - 16 / 116) / 7.787 * (mask == 0)
 
     (cube * mask + le) * illuminant_reference
+  end
+
+  defnp from_argb(tensor) do
+    tensor =
+      (tensor / 255)
+      |> Nx.power(2.19921875)
+      |> Nx.multiply(100)
+
+    r = Nx.slice_along_axis(tensor, 0, 1, axis: -1)
+    g = Nx.slice_along_axis(tensor, 1, 1, axis: -1)
+    b = Nx.slice_along_axis(tensor, 2, 1, axis: -1)
+
+    [
+      r * 0.5767309 + g * 0.1855540 + b * 0.1881852,
+      r * 0.2973769 + g * 0.6273491 + b * 0.0752741,
+      r * 0.0270343 + g * 0.0706872 + b * 0.9911085
+    ]
+    |> Nx.concatenate(axis: -1)
   end
 end
