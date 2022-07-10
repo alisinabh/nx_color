@@ -3,7 +3,7 @@ defmodule NxColors do
   Documentation for `NxColors`.
   """
 
-  alias NxColors.{Colorspace, Image}
+  alias NxColors.{Colorspace, Image, Router}
 
   def from_nx(tensor, opts \\ []) do
     channel = Keyword.get(opts, :channel, :last)
@@ -20,8 +20,10 @@ defmodule NxColors do
     reverse_channel(tensor, channel, :output)
   end
 
-  def change_colorspace(%Image{} = image, target_colorspace, opts \\ []) do
-    target_colorspace.convert(image, opts)
+  def change_colorspace(%Image{colorspace: colorspace} = image, target_colorspace, opts \\ []) do
+    colorspace
+    |> Router.get_route(target_colorspace)
+    |> Enum.reduce(image, & &1.convert(&2, opts))
   end
 
   defp reverse_channel(tensor, :last, _mode), do: tensor

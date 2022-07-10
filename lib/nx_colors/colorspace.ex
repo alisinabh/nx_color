@@ -39,16 +39,6 @@ defmodule NxColors.Colorspace do
     accepted_colorspaces = Module.get_attribute(module, :accepted_colorspaces)
 
     quote do
-      def convert(%NxColors.Image{colorspace: colorspace} = image, opts) do
-        with proxy when not is_nil(proxy) <-
-               Enum.find(accepted_colorspaces(), &(colorspace in &1.accepted_colorspaces())),
-             image = proxy.convert(image, opts) do
-          convert(image, opts)
-        else
-          nil -> raise "Converting #{colorspace} to #{__MODULE__} is not supported"
-        end
-      end
-
       def accepted_colorspaces, do: unquote(accepted_colorspaces)
     end
   end
