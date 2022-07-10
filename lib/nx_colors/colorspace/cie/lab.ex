@@ -16,7 +16,7 @@ defmodule NxColors.Colorspace.CIE.Lab do
     mask = tensor > lab_threshold()
 
     gr = Nx.cbrt(tensor) * mask
-    le = (tensor * 7.787 + 16 / 116) * (mask == 0)
+    le = (tensor * 24389 / 27 + 16) / 116 * (mask == 0)
 
     tensor = gr + le
 

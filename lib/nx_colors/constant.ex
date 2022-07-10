@@ -7,15 +7,15 @@ defmodule NxColors.Constant do
 
   defn(rgb_to_xyz_constants,
     do: [
-      [0.412453, 0.212671, 0.019334],
-      [0.357580, 0.715160, 0.119193],
-      [0.180423, 0.072169, 0.950227]
+      [0.4124564, 0.2126729, 0.0193339],
+      [0.3575761, 0.7151522, 0.1191920],
+      [0.1804375, 0.0721750, 0.9503041]
     ]
   )
 
   defn(rgb_xyz_threshold, do: 0.04045)
   defn(xyz_rgb_threshold, do: 0.0031308)
-  defn(lab_threshold, do: 0.008856)
+  defn(lab_threshold, do: 216 / 24389)
 
   @illuminant_references [
     %{

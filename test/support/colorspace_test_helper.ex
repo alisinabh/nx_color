@@ -9,21 +9,22 @@ defmodule NxColors.ColorspaceTestHelper do
       alias NxColors.Colorspace
 
       def approx_equal(t1, t2, opts \\ []) do
-        precision = Keyword.get(opts, :precision, 1.0e-4)
+        precision = Nx.power(10, Keyword.get(opts, :precision, 4))
         assert Nx.shape(t1) == Nx.shape(t2)
 
-        eq =
+        t1 =
           t1
-          |> Nx.subtract(t2)
-          |> Nx.abs()
-          |> Nx.less(precision)
-          |> Nx.all()
-          |> Nx.to_number()
-          |> then(&(&1 == 1))
+          |> Nx.multiply(precision)
+          |> Nx.round()
+          |> Nx.divide(precision)
 
-        unless eq do
-          assert t1 == t2
-        end
+        t2 =
+          t2
+          |> Nx.multiply(precision)
+          |> Nx.round()
+          |> Nx.divide(precision)
+
+        assert t1 == t2
       end
     end
   end
