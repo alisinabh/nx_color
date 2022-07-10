@@ -6,7 +6,7 @@ defmodule NxColors do
   alias NxColors.{Colorspace, Image}
 
   def from_nx(tensor, opts \\ []) do
-    channel = Keyword.get(opts, :channel, :first)
+    channel = Keyword.get(opts, :channel, :last)
     colorspace = Keyword.get(opts, :colorspace, Colorspace.RGB)
 
     %Image{
@@ -16,7 +16,7 @@ defmodule NxColors do
   end
 
   def to_nx(%Image{tensor: tensor}, opts \\ []) do
-    channel = Keyword.get(opts, :channel, :first)
+    channel = Keyword.get(opts, :channel, :last)
     reverse_channel(tensor, channel, :output)
   end
 
