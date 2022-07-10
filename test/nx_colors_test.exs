@@ -8,4 +8,5 @@ defmodule NxColorsTest do
   colorspacetest(Colorspace.CIE.Lab)
   colorspacetest(Colorspace.RGB)
   colorspacetest(Colorspace.XYZ)
+  colorspacetest(Colorspace.Yxy)
 end

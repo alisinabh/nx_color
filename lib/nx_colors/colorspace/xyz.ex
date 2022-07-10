@@ -18,6 +18,10 @@ defmodule NxColors.Colorspace.XYZ do
     from_argb(image.tensor)
   end
 
+  defconv from: Yxy do
+    from_yxy(image.tensor)
+  end
+
   defnp from_rgb(tensor) do
     tensor = tensor / 255
     mask = tensor > rgb_xyz_threshold()
@@ -62,6 +66,19 @@ defmodule NxColors.Colorspace.XYZ do
       r * 0.5767309 + g * 0.1855540 + b * 0.1881852,
       r * 0.2973769 + g * 0.6273491 + b * 0.0752741,
       r * 0.0270343 + g * 0.0706872 + b * 0.9911085
+    ]
+    |> Nx.concatenate(axis: -1)
+  end
+
+  defnp from_yxy(tensor) do
+    y = Nx.slice_along_axis(tensor, 0, 1, axis: -1)
+    x = Nx.slice_along_axis(tensor, 1, 1, axis: -1)
+    yp = Nx.slice_along_axis(tensor, 2, 1, axis: -1)
+
+    [
+      x * y / yp,
+      y,
+      (1 - x - yp) * y / yp
     ]
     |> Nx.concatenate(axis: -1)
   end
