@@ -5,6 +5,9 @@ defmodule NxColors.Constant do
 
   import Nx.Defn
 
+  @pi :math.pi()
+  defn(pi, do: @pi)
+
   defn(rgb_to_xyz_constants,
     do: [
       [0.4124564, 0.2126729, 0.0193339],
