@@ -5,27 +5,9 @@ defmodule NxColor.ColorspaceTestHelper do
     quote do
       require unquote(module)
       import unquote(module)
+      import NxColor.NxTestHelper
 
       alias NxColor.Colorspace
-
-      def approx_equal(t1, t2, opts \\ []) do
-        precision = Nx.power(10, Keyword.get(opts, :precision, 4))
-        assert Nx.shape(t1) == Nx.shape(t2)
-
-        t1 =
-          t1
-          |> Nx.multiply(precision)
-          |> Nx.round()
-          |> Nx.divide(precision)
-
-        t2 =
-          t2
-          |> Nx.multiply(precision)
-          |> Nx.round()
-          |> Nx.divide(precision)
-
-        assert t1 == t2
-      end
     end
   end
 
@@ -51,11 +33,15 @@ defmodule NxColor.ColorspaceTestHelper do
             target_tensor =
               File.read!(Path.join(["test/fixtures", unquote(to_path), file])) |> Nx.deserialize()
 
+            opts =
+              unquote(opts)
+              |> Keyword.put_new(:atol, 1.0e-7)
+
             source_tensor
             |> NxColor.from_nx(channel: :last, colorspace: unquote(colorspace))
             |> NxColor.change_colorspace(unquote(to_colorspace))
             |> NxColor.to_nx(channel: :last)
-            |> approx_equal(target_tensor, unquote(opts))
+            |> assert_all_close(target_tensor, opts)
           end)
         end
       end)
