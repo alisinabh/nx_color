@@ -16,7 +16,7 @@ NxColor can be installed by adding `nx_color` to your list of dependencies in `m
 ```elixir
 def deps do
   [
-    {:nx_color, "~> 0.0.0-dev"}
+    {:nx_color, "~> 0.0.1-dev"}
   ]
 end
 ```
