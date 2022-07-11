@@ -1,7 +1,5 @@
 defmodule NxColor.Colorspace do
-  @moduledoc """
-  Helpers and macros for defining colorspaces
-  """
+  @moduledoc false
 
   @callback convert(image :: NxColor.Image.t(), opts :: Keyword.t()) :: NxColor.Image.t()
 
