@@ -7,6 +7,7 @@ defmodule NxColor.MixProject do
   def project do
     [
       app: :nx_color,
+      name: "NxColor",
       version: @version,
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -50,9 +51,15 @@ defmodule NxColor.MixProject do
 
   defp docs do
     [
-      main: "NxColor",
+      main: "readme",
       source_ref: "v#{@version}",
-      source_url: @source_url
+      source_url: @source_url,
+      extras: [
+        "README.md"
+      ],
+      groups_for_modules: [
+        Colorspaces: ~r/NxColor.Colorspace./
+      ]
     ]
   end
 end
