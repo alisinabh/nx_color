@@ -50,6 +50,11 @@ defmodule NxColor do
     reverse_channel(tensor, channel, :output)
   end
 
+  def change_colorspace!(image, target_colorspace, opts \\ []) do
+    {:ok, image} = change_colorspace(image, target_colorspace, opts)
+    image
+  end
+
   @doc """
   Changes the colorspace of a given NxColor.Image struct to the `target_colorspace`.
 
@@ -59,11 +64,22 @@ defmodule NxColor do
   - opts: Colorspace specific options. See target colorspace module documentation for more info.
   """
   @spec change_colorspace(NxColor.Image.t(), atom(), Keyword.t()) ::
-          NxColor.Image.t() | no_return
+          {:ok, NxColor.Image.t()} | {:error, Router.route_error()}
   def change_colorspace(%Image{colorspace: colorspace} = image, target_colorspace, opts \\ []) do
-    colorspace
-    |> Router.get_route(target_colorspace)
-    |> Enum.reduce(image, & &1.convert(&2, opts))
+    with {:ok, route} <- Router.get_route(colorspace, target_colorspace) do
+      change_colorspace_with_route(image, route, opts)
+    end
+  end
+
+  def change_colorspace_with_route(image, route, opts \\ [])
+
+  def change_colorspace_with_route(%Image{} = image, [colorspace | t], opts) do
+    colorspace.convert(image, opts)
+    |> change_colorspace_with_route(t)
+  end
+
+  def change_colorspace_with_route(%Image{} = image, [], _opts) do
+    {:ok, image}
   end
 
   defp reverse_channel(tensor, :last, _mode), do: tensor

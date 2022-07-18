@@ -37,10 +37,11 @@ defmodule NxColor.ColorspaceTestHelper do
               unquote(opts)
               |> Keyword.put_new(:atol, 1.0e-7)
 
-            source_tensor
-            |> NxColor.from_nx(channel: :last, colorspace: unquote(colorspace))
-            |> NxColor.change_colorspace(unquote(to_colorspace))
-            |> NxColor.to_nx(channel: :last)
+            image = NxColor.from_nx(source_tensor, colorspace: unquote(colorspace))
+            assert {:ok, image} = NxColor.change_colorspace(image, unquote(to_colorspace))
+
+            image
+            |> NxColor.to_nx()
             |> assert_all_close(target_tensor, opts)
           end)
         end
